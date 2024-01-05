@@ -1,0 +1,35 @@
+<script type="text/javascript">
+    RED.nodes.registerType('capability-check', {
+        category: 'function',
+        color: '#a6bbcf',
+        defaults: {
+            name: { value: "" }
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: "vws4ls.png",
+        label: function () {
+            return this.name || "capability-check";
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="capability-check">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+</script>
+
+<script type="text/html" data-help-name="capability-check">
+    <p>This node executes a capability check to check if a machine is able to
+        provide a certain required capability. The message payload needs to include
+    <ul>
+        <li>aasRestServerEndpoint: endpoint of the AAS server providing access to all relevant AASes; e.g. 'http://localhost:5001'</li>
+        <li>requiredCapabiltySubmodelId: id of the AAS submodel defining the required capability (this is expected to be available at the AAS server, see above); e.g. 'www.tier1.com/ids/sm/2135_1132_8032_2655'</li>
+        <li>requiredCapabilityContainerIdShortPath: idShort path pointing to the required capability to check; this is expected to be within the required capability submodel identified via 'requiredCapabiltySubmodelId'; e.g. 'CapabilitySet/CapabilityContainer01'</li>
+        <li>machineAasId: the id of the AAS representing the machine to check for the required capability (this is expected to be available at the AAS server, see above); e.g. 'www.komaxgroup.com/ids/aas/4420_0010_1010_9339'</li>
+    </ul>
+    The flow return a result object with detailed information about the result of the capability check.
+    </p>
+</script>

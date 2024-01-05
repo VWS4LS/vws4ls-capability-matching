@@ -1,0 +1,19 @@
+{
+  "name": "capability-check-node-red",
+  "version": "1.0.0",
+  "description": "",
+  "main": "capabilityCheck.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "matthias.freund@festo.com",
+  "license": "ISC",
+  "node-red": {
+    "nodes": {
+      "capability-check": "capabilityCheck.js"
+    }
+  },
+  "dependencies": {
+    "capability-check": "file:../capability-check"
+  }
+}

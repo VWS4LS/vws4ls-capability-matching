@@ -1,0 +1,16 @@
+{
+  "name": "capability-check",
+  "version": "1.0.0",
+  "description": "A utiltity package to execute a capability check (Is a certain machine able to provide a certain capability?) based on required/offered capability models within Asset Administration Shells.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "matthias.freund@festo.com",
+  "license": "ISC",
+  "dependencies": {
+    "@aas-core-works/aas-core3.0-typescript": "^1.0.0-rc.3",
+    "node-fetch": "^2.7.0"
+  }
+}
