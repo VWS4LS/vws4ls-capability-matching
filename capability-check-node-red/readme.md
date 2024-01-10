@@ -29,16 +29,16 @@ After instantiating this node, make sure to provide its input with messages cont
     // id of the AAS submodel defining the required capability
     // (this is expected to be available at the AAS server, see above)
     requiredCapabiltySubmodelId : 'www.tier1.com/ids/sm/2135_1132_8032_2655',
-    // idShort path pointing to the required capability to check; this is expected
+    // idShort path(s) pointing to the required capability/ies to check; this is expected
     // to be within the required capability submodel identified via 'requiredCapabiltySubmodelId'
-    requiredCapabilityContainerIdShortPath : 'CapabilitySet/CapabilityContainer01',
+    requiredCapabilityContainerIdShortPath : 'CapabilitySet/CapabilityContainer01', // or: ['CapabilitySet/CapabilityContainer01', 'CapabilitySet/CapabilityContainer04']
     // the id of the AAS representing the machine to check for the required capability
     // (this is expected to be available at the AAS server, see above)
     machineAasId : 'www.komaxgroup.com/ids/aas/4420_0010_1010_9339'
 }
 ```
 
-When triggered, the node will send a message with the result of the capability 
-check to the output. The result object contains detailed information about the 
+When triggered, the node will send a message with the result(s) of the capability 
+check to the output. The result object(s) contain/s detailed information about the 
 result of the capability check, e.g. a message via the check failed or 
 information about additional tools required to provide a capability.

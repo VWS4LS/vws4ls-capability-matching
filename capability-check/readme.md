@@ -31,7 +31,7 @@ const aasRestServerEndpoint = 'http://localhost:5001';
 // (this is expected to be available at the AAS server, see above)
 const requiredCapabiltySubmodelId = 'www.tier1.com/ids/sm/2135_1132_8032_2655';
 
-// idShort path pointing to the required capability to check; this is expected
+// idShort path(s) pointing to the required capability/ies to check; this is expected
 // to be within the required capability submodel identified via 'requiredCapabiltySubmodelId'
 const requiredCapabilityContainerIdShortPath = 'CapabilitySet/CapabilityContainer01';
 

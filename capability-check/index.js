@@ -11,13 +11,24 @@ const aas = require('@aas-core-works/aas-core3.0-typescript');
  * 
  * @param {string} aasRestServerEndpoint endpoint of the AAS server providing access to all relevant AASes
  * @param {string} requiredCapabiltySubmodelId id of the AAS submodel defining the required capability (this is expected to be available at the AAS server, see above)
- * @param {string | string[]} requiredCapabilityContainerIdShortPath  idShort path/s pointing to the required capability/ies to check; this is expected
+ * @param {string | string[]} requiredCapabilityContainerIdShortPath idShort path/s pointing to the required capability/ies to check; this is expected
  *  to be within the required capability submodel identified via {@link requiredCapabiltySubmodelId}
  * @param {string} machineAasId the id of the AAS representing the machine to check for the required capability
  *  (this is expected to be available at the AAS server, see above)
- * @returns 
+ * @returns A result object (or an array of result objects in case multiple required capabilities where queried) describing the result(s) of the capability check. 
  */
 const executeCapabilityCheck = async (aasRestServerEndpoint, requiredCapabiltySubmodelId, requiredCapabilityContainerIdShortPath, machineAasId) => {
+
+    if (typeof (requiredCapabilityContainerIdShortPath) === 'string') {
+        return executeSingleCapabilityCheck(aasRestServerEndpoint, requiredCapabiltySubmodelId, requiredCapabilityContainerIdShortPath, machineAasId);
+    } else {
+        return Promise.all(requiredCapabilityContainerIdShortPath.map(path => {
+            return executeSingleCapabilityCheck(aasRestServerEndpoint, requiredCapabiltySubmodelId, path, machineAasId);
+        }));
+    }
+}
+
+const executeSingleCapabilityCheck = async (aasRestServerEndpoint, requiredCapabiltySubmodelId, requiredCapabilityContainerIdShortPath, machineAasId) => {
 
     const resultObject = {
         aasRestServerEndpoint: aasRestServerEndpoint,
