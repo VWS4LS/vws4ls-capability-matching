@@ -5,6 +5,18 @@ const bomUtils = require('./bomUtils');
 
 const aas = require('@aas-core-works/aas-core3.0-typescript');
 
+/**
+ * Executes a capabilty check, i.e. checks if the ressource/machine specified by {@link machineAasId} can offer the capability/ies specified by the
+ * combination of {@link requiredCapabiltySubmodelId} and {@link requiredCapabilityContainerIdShortPath}.
+ * 
+ * @param {string} aasRestServerEndpoint endpoint of the AAS server providing access to all relevant AASes
+ * @param {string} requiredCapabiltySubmodelId id of the AAS submodel defining the required capability (this is expected to be available at the AAS server, see above)
+ * @param {string | string[]} requiredCapabilityContainerIdShortPath  idShort path/s pointing to the required capability/ies to check; this is expected
+ *  to be within the required capability submodel identified via {@link requiredCapabiltySubmodelId}
+ * @param {string} machineAasId the id of the AAS representing the machine to check for the required capability
+ *  (this is expected to be available at the AAS server, see above)
+ * @returns 
+ */
 const executeCapabilityCheck = async (aasRestServerEndpoint, requiredCapabiltySubmodelId, requiredCapabilityContainerIdShortPath, machineAasId) => {
 
     const resultObject = {
@@ -92,8 +104,8 @@ const executeCapabilityCheck = async (aasRestServerEndpoint, requiredCapabiltySu
         resultObject.suitableTools = aASesOfSuitableTools.map(aas => aas.id);
 
         // Step 4: Find the tools that can be mounted in the machine (if we are in instance mode)
+        const mountingPathsByTool = {};
         if (!isInstance) {
-            const mountingPathsByTool = {};
             for (var toolAAS of aASesOfSuitableTools) {
                 const mountingPaths = capabilityMatching.determineMountingPaths(toolAAS, aASes);
 
@@ -138,4 +150,4 @@ module.exports = {
     executeCapabilityCheck: executeCapabilityCheck
 };
 
-//executeCapabilityMatching("http://localhost:5001", "www.tier1.com/ids/sm/2135_1132_8032_2655", "CapabilitySet/CapabilityContainer01", "www.komaxgroup.com/ids/aas/4420_0010_1010_9339");
+// executeCapabilityCheck("http://localhost:5001", "www.tier1.com/ids/sm/2135_1132_8032_2655", "CapabilitySet/CapabilityContainer01", "www.komaxgroup.com/ids/aas/4420_0010_1010_9339");
