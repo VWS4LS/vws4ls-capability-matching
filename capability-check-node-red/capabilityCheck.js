@@ -11,7 +11,8 @@ module.exports = function (RED) {
                 payload.aasRestServerEndpoint,
                 payload.requiredCapabiltySubmodelId,
                 payload.requiredCapabilityContainerIdShortPath,
-                payload.machineAasId
+                payload.machineAasId,
+                payload.instanceCheck
             );
 
             msg.payload = result;

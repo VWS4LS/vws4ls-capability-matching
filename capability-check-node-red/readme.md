@@ -35,7 +35,12 @@ After instantiating this node, make sure to provide its input with messages cont
     requiredCapabilityContainerIdShortPath : 'CapabilitySet/CapabilityContainer01', // or: ['CapabilitySet/CapabilityContainer01', 'CapabilitySet/CapabilityContainer04']
     // the id of the AAS representing the machine to check for the required capability
     // (this is expected to be available at the AAS server, see above)
-    machineAasId : 'www.komaxgroup.com/ids/aas/4420_0010_1010_9339'
+    machineAasId : 'www.komaxgroup.com/ids/aas/4420_0010_1010_9339',
+    // whether the capability check shall be executed on an instance-base (taking into account the 
+    // currently mounted tools) or on a type-base (taking into account tools that can theoretically 
+    // be mounted); if this parameter is omitted, the type of check will be determined based on 
+    // the type of machine AAS (AAS type == instance -> instance check; AAS type == type -> type check)
+    instanceCheck : false // or: omit this parameter
 }
 ```
 

@@ -47,11 +47,18 @@ const requiredCapabilityContainerIdShortPath = 'CapabilitySet/CapabilityContaine
 // (this is expected to be available at the AAS server, see above)
 const machineAasId = 'www.komaxgroup.com/ids/aas/4420_0010_1010_9339';
 
+// whether the capability check shall be executed on an instance-base (taking into account the 
+// currently mounted tools) or on a type-base (taking into account tools that can theoretically 
+// be mounted); if this parameter is omitted, the type of check will be determined based on 
+// the type of machine AAS (AAS type == instance -> instance check; AAS type == type -> type check)
+const instanceCheck = false;
+
 let result = await capabilityCheck.executeCapabilityCheck(
     aasRestServerEndpoint, // or: endpoints
     requiredCapabiltySubmodelId, 
     requiredCapabilityContainerIdShortPath, 
-    machineAasId
+    machineAasId,
+    instanceCheck // or: omit this parameter        
 );
 
 // whether the capability check succeeded

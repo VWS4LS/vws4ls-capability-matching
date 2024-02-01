@@ -16,20 +16,23 @@ const aas = require('@aas-core-works/aas-core3.0-typescript');
  *  to be within the required capability submodel identified via {@link requiredCapabiltySubmodelId}
  * @param {string} machineAasId the id of the AAS representing the machine to check for the required capability
  *  (this is expected to be available at the AAS server, see above)
+ * @param {boolean} instanceCheck whether the capability check shall be executed on an instance-base (taking into account the currently mounted tools) or on a type-base
+ *  (taking into account tools that can theoretically be mounted); if this parameter is omitted, the type of check will be determined based on the type of machine AAS
+ *  (AAS type == instance -> instance check; AAS type == type -> type check)
  * @returns A result object (or an array of result objects in case multiple required capabilities where queried) describing the result(s) of the capability check. 
  */
-const executeCapabilityCheck = async (endpoint, requiredCapabiltySubmodelId, requiredCapabilityContainerIdShortPath, machineAasId) => {
+const executeCapabilityCheck = async (endpoint, requiredCapabiltySubmodelId, requiredCapabilityContainerIdShortPath, machineAasId, instanceCheck = null) => {
     
     if (typeof (requiredCapabilityContainerIdShortPath) === 'string') {
-        return executeSingleCapabilityCheck(endpoint, requiredCapabiltySubmodelId, requiredCapabilityContainerIdShortPath, machineAasId);
+        return executeSingleCapabilityCheck(endpoint, requiredCapabiltySubmodelId, requiredCapabilityContainerIdShortPath, machineAasId, instanceCheck);
     } else {
         return Promise.all(requiredCapabilityContainerIdShortPath.map(path => {
-            return executeSingleCapabilityCheck(endpoint, requiredCapabiltySubmodelId, path, machineAasId);
+            return executeSingleCapabilityCheck(endpoint, requiredCapabiltySubmodelId, path, machineAasId, instanceCheck);
         }));
     }
 }
 
-const executeSingleCapabilityCheck = async (endpoint, requiredCapabiltySubmodelId, requiredCapabilityContainerIdShortPath, machineAasId) => {
+const executeSingleCapabilityCheck = async (endpoint, requiredCapabiltySubmodelId, requiredCapabilityContainerIdShortPath, machineAasId, instanceCheck) => {
 
     const resultObject = {
         endpoint: endpoint,
@@ -59,7 +62,12 @@ const executeSingleCapabilityCheck = async (endpoint, requiredCapabiltySubmodelI
         const requiredCapabilityValue = capabilityMatching.getCapabilitySemanticId(requiredCapabilityContainer);
 
         const machineAas = await getShell(machineAasId);
-        const isInstance = machineAas.assetInformation.assetKind === aas.types.AssetKind.Instance;
+        let isInstance = machineAas.assetInformation.assetKind === aas.types.AssetKind.Instance;
+        
+        // if the type of check is explicitly specified, override the default value
+        if (typeof (instanceCheck) === 'boolean') {
+            isInstance = instanceCheck;
+        }
 
         resultObject.typeOfCheck = isInstance ? "Instance" : "Type";
 
