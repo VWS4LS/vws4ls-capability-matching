@@ -25,7 +25,15 @@ This node module provides exactly one function that can be called and that will 
 const capabilityCheck = require('capability-check');
 
 // endpoint of the AAS server providing access to all relevant AASes
-const aasRestServerEndpoint = 'http://localhost:5001'; 
+const aasServerEndpoint = 'http://localhost:5001'; 
+
+// alternatively, instead of providing the endpoint of an aasServer, it is also possible
+// to provide an object with two members 'aasRegistryEndpoint' and 'submodelRegistryEndpoint' 
+// describing the registry endpoints used to find the servers hosting the relevant AASes and submodels;
+const endpoints = {
+    aasRegistryEndpoint = 'http://localhost:5001',
+    submodelRegistryEndpoint = 'http://localhost:5001'
+}
 
 // id of the AAS submodel defining the required capability
 // (this is expected to be available at the AAS server, see above)
@@ -33,14 +41,14 @@ const requiredCapabiltySubmodelId = 'www.tier1.com/ids/sm/2135_1132_8032_2655';
 
 // idShort path(s) pointing to the required capability/ies to check; this is expected
 // to be within the required capability submodel identified via 'requiredCapabiltySubmodelId'
-const requiredCapabilityContainerIdShortPath = 'CapabilitySet/CapabilityContainer01';
+const requiredCapabilityContainerIdShortPath = 'CapabilitySet/CapabilityContainer01'; // or: ['CapabilitySet/CapabilityContainer01', 'CapabilitySet/CapabilityContainer02']
 
 // the id of the AAS representing the machine to check for the required capability
 // (this is expected to be available at the AAS server, see above)
 const machineAasId = 'www.komaxgroup.com/ids/aas/4420_0010_1010_9339';
 
 let result = await capabilityCheck.executeCapabilityCheck(
-    aasRestServerEndpoint, 
+    aasRestServerEndpoint, // or: endpoints
     requiredCapabiltySubmodelId, 
     requiredCapabilityContainerIdShortPath, 
     machineAasId

@@ -9,7 +9,8 @@ const aas = require('@aas-core-works/aas-core3.0-typescript');
  * Executes a capabilty check, i.e. checks if the ressource/machine specified by {@link machineAasId} can offer the capability/ies specified by the
  * combination of {@link requiredCapabiltySubmodelId} and {@link requiredCapabilityContainerIdShortPath}.
  * 
- * @param {string} aasRestServerEndpoint endpoint of the AAS server providing access to all relevant AASes
+ * @param {string | object} endpoint either a string representing the endpoint of an AAS server providing access to all relevant AASes and submodels or an object with two
+ *  members 'aasRegistryEndpoint' and 'submodelRegistryEndpoint' describing the registry endpoints used to find the servers hosting the relevant AASes and submodels
  * @param {string} requiredCapabiltySubmodelId id of the AAS submodel defining the required capability (this is expected to be available at the AAS server, see above)
  * @param {string | string[]} requiredCapabilityContainerIdShortPath idShort path/s pointing to the required capability/ies to check; this is expected
  *  to be within the required capability submodel identified via {@link requiredCapabiltySubmodelId}
@@ -17,37 +18,52 @@ const aas = require('@aas-core-works/aas-core3.0-typescript');
  *  (this is expected to be available at the AAS server, see above)
  * @returns A result object (or an array of result objects in case multiple required capabilities where queried) describing the result(s) of the capability check. 
  */
-const executeCapabilityCheck = async (aasRestServerEndpoint, requiredCapabiltySubmodelId, requiredCapabilityContainerIdShortPath, machineAasId) => {
-
+const executeCapabilityCheck = async (endpoint, requiredCapabiltySubmodelId, requiredCapabilityContainerIdShortPath, machineAasId) => {
+    
     if (typeof (requiredCapabilityContainerIdShortPath) === 'string') {
-        return executeSingleCapabilityCheck(aasRestServerEndpoint, requiredCapabiltySubmodelId, requiredCapabilityContainerIdShortPath, machineAasId);
+        return executeSingleCapabilityCheck(endpoint, requiredCapabiltySubmodelId, requiredCapabilityContainerIdShortPath, machineAasId);
     } else {
         return Promise.all(requiredCapabilityContainerIdShortPath.map(path => {
-            return executeSingleCapabilityCheck(aasRestServerEndpoint, requiredCapabiltySubmodelId, path, machineAasId);
+            return executeSingleCapabilityCheck(endpoint, requiredCapabiltySubmodelId, path, machineAasId);
         }));
     }
 }
 
-const executeSingleCapabilityCheck = async (aasRestServerEndpoint, requiredCapabiltySubmodelId, requiredCapabilityContainerIdShortPath, machineAasId) => {
+const executeSingleCapabilityCheck = async (endpoint, requiredCapabiltySubmodelId, requiredCapabilityContainerIdShortPath, machineAasId) => {
 
     const resultObject = {
-        aasRestServerEndpoint: aasRestServerEndpoint,
+        endpoint: endpoint,
         requiredCapabiltySubmodelId: requiredCapabiltySubmodelId,
         requiredCapabilityContainerIdShortPath: requiredCapabilityContainerIdShortPath,
         machineAasId: machineAasId
     };
 
+    if (typeof (endpoint) === 'string') {
+        var getShells = (predicate) => aasRestAPI.serverBasedApi.getShells.apply(null, [endpoint, predicate]);
+        var getShell = (aasId) => aasRestAPI.serverBasedApi.getShell.apply(null, [endpoint, aasId]);
+        var getSubmodel = (submodelId) => aasRestAPI.serverBasedApi.getSubmodel.apply(null, [endpoint, submodelId]);
+        var getFirstSubmodel = (aasId, predicate) => aasRestAPI.serverBasedApi.getFirstSubmodel.apply(null, [endpoint, aasId, predicate]);
+    } else {
+        var aasRegistryEndpoint = endpoint.aasRegistryEndpoint;
+        var submodelRegistryEndpoint = endpoint.submodelRegistryEndpoint;
+
+        var getShells = (predicate) => aasRestAPI.registryBasedApi.getShellsViaRegistry.apply(null, [aasRegistryEndpoint, predicate]);
+        var getShell = (aasId) => aasRestAPI.registryBasedApi.getShellViaRegistry.apply(null, [aasRegistryEndpoint, aasId]);
+        var getSubmodel = (submodelId) => aasRestAPI.registryBasedApi.getSubmodelViaRegistry.apply(null, [submodelRegistryEndpoint, submodelId]);
+        var getFirstSubmodel = (aasId, predicate) => aasRestAPI.registryBasedApi.getFirstSubmodelViaRegistry.apply(null, [aasRegistryEndpoint, submodelRegistryEndpoint, aasId, predicate]);
+    }
+
     try {
-        const requiredCapabiltySubmodel = await aasRestAPI.getSubmodel(aasRestServerEndpoint, requiredCapabiltySubmodelId);
+        const requiredCapabiltySubmodel = await getSubmodel(requiredCapabiltySubmodelId);
         const requiredCapabilityContainer = aasUtils.getElementByIdShortPath(requiredCapabiltySubmodel, requiredCapabilityContainerIdShortPath);
         const requiredCapabilityValue = capabilityMatching.getCapabilitySemanticId(requiredCapabilityContainer);
 
-        const machineAas = await aasRestAPI.getShell(aasRestServerEndpoint, machineAasId);
+        const machineAas = await getShell(machineAasId);
         const isInstance = machineAas.assetInformation.assetKind === aas.types.AssetKind.Instance;
 
         resultObject.typeOfCheck = isInstance ? "Instance" : "Type";
 
-        const offeredCapabilitySubmodel = await aasRestAPI.getFirstSubmodel(aasRestServerEndpoint, machineAasId, (submodel) => submodel.idShort === "OfferedCapabilities");
+        const offeredCapabilitySubmodel = await getFirstSubmodel(machineAasId, (submodel) => submodel.idShort === "OfferedCapabilities");
         const offeredCapabilityContainer = capabilityMatching.findCapabilityContainer(offeredCapabilitySubmodel, requiredCapabilityValue);
 
         // Step 1: Check if the machine provides the capability and fulfills all constraints
@@ -68,14 +84,14 @@ const executeSingleCapabilityCheck = async (aasRestServerEndpoint, requiredCapab
         }
 
         // Step 3a: If the machine requires a tool, find all AASes representing such a tool
-        const aASes = await aasRestAPI.getShells(aasRestServerEndpoint);
+        const aASes = await getShells();
         const toolAASes = aASes.filter((shell) => aasUtils.hasExtensionValue(shell, "http://arena2036.de/toolType/1/0", requiredToolCondition));
 
         // Step 3b: Depending on if we look at a type or at an instance, select either all tools or only the currently mounted ones
         let toolAASesToBeConsidered = [];
 
         if (isInstance) {
-            const bomSubmodel = await aasRestAPI.getFirstSubmodel(aasRestServerEndpoint, machineAasId, (submodel) => submodel.idShort === "HierarchicalStructures");
+            const bomSubmodel = await getFirstSubmodel(machineAasId, (submodel) => submodel.idShort === "HierarchicalStructures");
 
             if (!bomSubmodel) {
                 resultObject.success = false;
@@ -94,7 +110,7 @@ const executeSingleCapabilityCheck = async (aasRestServerEndpoint, requiredCapab
         // Step 3c: Check if the selected tools provide the capability and fulfill all constraints
         var aASesOfSuitableTools = []
         for (var shell of toolAASesToBeConsidered) {
-            const toolOfferedCapabilitySubmodel = await aasRestAPI.getFirstSubmodel(aasRestServerEndpoint, shell.id, capabilityMatching.isOfferedCapabilitiesSubmodel);
+            const toolOfferedCapabilitySubmodel = await getFirstSubmodel(shell.id, capabilityMatching.isOfferedCapabilitiesSubmodel);
 
             if (!toolOfferedCapabilitySubmodel) {
                 continue;
@@ -161,4 +177,4 @@ module.exports = {
     executeCapabilityCheck: executeCapabilityCheck
 };
 
-// executeCapabilityCheck("http://localhost:5001", "www.tier1.com/ids/sm/2135_1132_8032_2655", "CapabilitySet/CapabilityContainer01", "www.komaxgroup.com/ids/aas/4420_0010_1010_9339");
+//executeCapabilityCheck("http://localhost:5001", "www.tier1.com/ids/sm/2135_1132_8032_2655", "CapabilitySet/CapabilityContainer01", "www.komaxgroup.com/ids/aas/4420_0010_1010_9339");

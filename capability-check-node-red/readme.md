@@ -24,8 +24,9 @@ After instantiating this node, make sure to provide its input with messages cont
 
 ```javascript
 {
-    // endpoint of the AAS server providing access to all relevant AASes
-    aasRestServerEndpoint : 'http://localhost:5001',
+    // either a string representing the endpoint of an AAS server providing access to all relevant AASes and submodels or an object with two members 
+    // 'aasRegistryEndpoint' and 'submodelRegistryEndpoint' describing the registry endpoints used to find the servers hosting the relevant AASes and submodels
+    aasRestServerEndpoint : 'http://localhost:5001', // or: {aasRegistryEndpoint = 'http://localhost:5001', submodelRegistryEndpoint = 'http://localhost:5001'}
     // id of the AAS submodel defining the required capability
     // (this is expected to be available at the AAS server, see above)
     requiredCapabiltySubmodelId : 'www.tier1.com/ids/sm/2135_1132_8032_2655',

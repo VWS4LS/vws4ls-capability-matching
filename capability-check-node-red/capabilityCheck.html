@@ -25,7 +25,7 @@
     <p>This node executes a capability check to check if a machine is able to
         provide a certain required capability. The message payload needs to include
     <ul>
-        <li>aasRestServerEndpoint: endpoint of the AAS server providing access to all relevant AASes; e.g. 'http://localhost:5001'</li>
+        <li>endpoint: either a string representing the endpoint of an AAS server providing access to all relevant AASes and submodels or an object with two members 'aasRegistryEndpoint' and 'submodelRegistryEndpoint' describing the registry endpoints used to find the servers hosting the relevant AASes and submodels; e.g. 'http://localhost:5001' or {aasRegistryEndpoint = 'http://localhost:5001', submodelRegistryEndpoint = 'http://localhost:5001'}</li>
         <li>requiredCapabiltySubmodelId: id of the AAS submodel defining the required capability (this is expected to be available at the AAS server, see above); e.g. 'www.tier1.com/ids/sm/2135_1132_8032_2655'</li>
         <li>requiredCapabilityContainerIdShortPath: idShort path pointing to the required capability to check; this is expected to be within the required capability submodel identified via 'requiredCapabiltySubmodelId'; e.g. 'CapabilitySet/CapabilityContainer01'</li>
         <li>machineAasId: the id of the AAS representing the machine to check for the required capability (this is expected to be available at the AAS server, see above); e.g. 'www.komaxgroup.com/ids/aas/4420_0010_1010_9339'</li>
