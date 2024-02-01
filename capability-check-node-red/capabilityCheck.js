@@ -8,7 +8,7 @@ module.exports = function (RED) {
             let payload = msg.payload;
 
             let result = await capabilityCheck.executeCapabilityCheck(
-                payload.aasRestServerEndpoint,
+                payload.endpoint,
                 payload.requiredCapabiltySubmodelId,
                 payload.requiredCapabilityContainerIdShortPath,
                 payload.machineAasId,

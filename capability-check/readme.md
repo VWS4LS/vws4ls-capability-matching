@@ -30,7 +30,7 @@ const aasServerEndpoint = 'http://localhost:5001';
 // alternatively, instead of providing the endpoint of an aasServer, it is also possible
 // to provide an object with two members 'aasRegistryEndpoint' and 'submodelRegistryEndpoint' 
 // describing the registry endpoints used to find the servers hosting the relevant AASes and submodels;
-const endpoints = {
+const registryEndpoints = {
     aasRegistryEndpoint = 'http://localhost:5001',
     submodelRegistryEndpoint = 'http://localhost:5001'
 }
@@ -54,7 +54,7 @@ const machineAasId = 'www.komaxgroup.com/ids/aas/4420_0010_1010_9339';
 const instanceCheck = false;
 
 let result = await capabilityCheck.executeCapabilityCheck(
-    aasRestServerEndpoint, // or: endpoints
+    aasRestServerEndpoint, // or: registryEndpoints
     requiredCapabiltySubmodelId, 
     requiredCapabilityContainerIdShortPath, 
     machineAasId,

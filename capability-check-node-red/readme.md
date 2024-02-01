@@ -26,21 +26,21 @@ After instantiating this node, make sure to provide its input with messages cont
 {
     // either a string representing the endpoint of an AAS server providing access to all relevant AASes and submodels or an object with two members 
     // 'aasRegistryEndpoint' and 'submodelRegistryEndpoint' describing the registry endpoints used to find the servers hosting the relevant AASes and submodels
-    aasRestServerEndpoint : 'http://localhost:5001', // or: {aasRegistryEndpoint = 'http://localhost:5001', submodelRegistryEndpoint = 'http://localhost:5001'}
+    "endpoint" : "http://localhost:5001", // or: {"aasRegistryEndpoint" = "http://localhost:5001", "submodelRegistryEndpoint" = "http://localhost:5001"}
     // id of the AAS submodel defining the required capability
     // (this is expected to be available at the AAS server, see above)
-    requiredCapabiltySubmodelId : 'www.tier1.com/ids/sm/2135_1132_8032_2655',
+    "requiredCapabiltySubmodelId" : "www.tier1.com/ids/sm/2135_1132_8032_2655",
     // idShort path(s) pointing to the required capability/ies to check; this is expected
     // to be within the required capability submodel identified via 'requiredCapabiltySubmodelId'
-    requiredCapabilityContainerIdShortPath : 'CapabilitySet/CapabilityContainer01', // or: ['CapabilitySet/CapabilityContainer01', 'CapabilitySet/CapabilityContainer04']
+    "requiredCapabilityContainerIdShortPath" : "CapabilitySet/CapabilityContainer01", // or: ["CapabilitySet/CapabilityContainer01", "CapabilitySet/CapabilityContainer04"]
     // the id of the AAS representing the machine to check for the required capability
     // (this is expected to be available at the AAS server, see above)
-    machineAasId : 'www.komaxgroup.com/ids/aas/4420_0010_1010_9339',
+    "machineAasId" : "www.komaxgroup.com/ids/aas/4420_0010_1010_9339",
     // whether the capability check shall be executed on an instance-base (taking into account the 
     // currently mounted tools) or on a type-base (taking into account tools that can theoretically 
     // be mounted); if this parameter is omitted, the type of check will be determined based on 
     // the type of machine AAS (AAS type == instance -> instance check; AAS type == type -> type check)
-    instanceCheck : false // or: omit this parameter
+    "instanceCheck" : false // or: omit this parameter
 }
 ```
 
