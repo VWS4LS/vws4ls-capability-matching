@@ -30,7 +30,13 @@ const getOfferedCapabilitiesSubmodel = (submodels) => {
 
 const getCapabilitySemanticId = (capabilityContainer) => {
     const capability = aasUtils.findChildByType(capabilityContainer, aas.types.Capability);
-    return aasUtils.getSemanticIdAsSingleKey(capability);
+    const semanticId = aasUtils.getSemanticIdAsSingleKey(capability);
+
+    if (semanticId !== 'https://wiki.eclipse.org/BaSyx_/_Documentation_/_Submodels_/_Capability#Capability') {
+        return semanticId;
+    } else {
+        return aasUtils.getSupplementarySemanticIdsAsSingleKeys(capability)?.at(0);
+    }
 }
 
 const hasCapabilitySemanticId = (capabilityContainer, semanticId) => {

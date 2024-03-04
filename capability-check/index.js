@@ -22,7 +22,7 @@ const aas = require('@aas-core-works/aas-core3.0-typescript');
  * @returns A result object (or an array of result objects in case multiple required capabilities where queried) describing the result(s) of the capability check. 
  */
 const executeCapabilityCheck = async (endpoint, requiredCapabiltySubmodelId, requiredCapabilityContainerIdShortPath, machineAasId, instanceCheck = null) => {
-    
+
     if (typeof (requiredCapabilityContainerIdShortPath) === 'string') {
         return executeSingleCapabilityCheck(endpoint, requiredCapabiltySubmodelId, requiredCapabilityContainerIdShortPath, machineAasId, instanceCheck);
     } else {
@@ -42,10 +42,10 @@ const executeSingleCapabilityCheck = async (endpoint, requiredCapabiltySubmodelI
     };
 
     if (typeof (endpoint) === 'string') {
-        var getShells = (predicate) => aasRestAPI.serverBasedApi.getShells.apply(null, [endpoint, predicate]);
-        var getShell = (aasId) => aasRestAPI.serverBasedApi.getShell.apply(null, [endpoint, aasId]);
-        var getSubmodel = (submodelId) => aasRestAPI.serverBasedApi.getSubmodel.apply(null, [endpoint, submodelId]);
-        var getFirstSubmodel = (aasId, predicate) => aasRestAPI.serverBasedApi.getFirstSubmodel.apply(null, [endpoint, aasId, predicate]);
+        var getShells = (predicate) => aasRestAPI.serverBasedApi.getShellsViaServer.apply(null, [endpoint, predicate]);
+        var getShell = (aasId) => aasRestAPI.serverBasedApi.getShellViaServer.apply(null, [endpoint, aasId]);
+        var getSubmodel = (submodelId) => aasRestAPI.serverBasedApi.getSubmodelViaServer.apply(null, [endpoint, submodelId]);
+        var getFirstSubmodel = (aasId, predicate) => aasRestAPI.serverBasedApi.getFirstSubmodelFromServer.apply(null, [endpoint, aasId, predicate]);
     } else {
         var aasRegistryEndpoint = endpoint.aasRegistryEndpoint;
         var submodelRegistryEndpoint = endpoint.submodelRegistryEndpoint;
@@ -63,7 +63,7 @@ const executeSingleCapabilityCheck = async (endpoint, requiredCapabiltySubmodelI
 
         const machineAas = await getShell(machineAasId);
         let isInstance = machineAas.assetInformation.assetKind === aas.types.AssetKind.Instance;
-        
+
         // if the type of check is explicitly specified, override the default value
         if (typeof (instanceCheck) === 'boolean') {
             isInstance = instanceCheck;
@@ -185,4 +185,12 @@ module.exports = {
     executeCapabilityCheck: executeCapabilityCheck
 };
 
-//executeCapabilityCheck("http://localhost:5001", "www.tier1.com/ids/sm/2135_1132_8032_2655", "CapabilitySet/CapabilityContainer01", "www.komaxgroup.com/ids/aas/4420_0010_1010_9339");
+executeCapabilityCheck(
+    {
+        "aasRegistryEndpoint": 'http://tractus-x-07.arena2036.de:8082',
+        "submodelRegistryEndpoint": 'http://tractus-x-07.arena2036.de:8083'
+    },
+    "https://www.arena2036.de/sm/7084_8002_2042_5688",
+    "CapabilitySet/CapabilityContainer03",
+    "http://smart.komaxgroup.com/aas/03bb64b3-2563-4f22-a475-b3732bad1e16"
+);

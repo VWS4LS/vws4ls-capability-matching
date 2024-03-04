@@ -61,6 +61,14 @@ const getSemanticIdAsSingleKey = (element) => {
     return getReferenceAsSingleKey(element.semanticId);
 }
 
+const getSupplementarySemanticIdsAsSingleKeys = (element) => {
+    if (!element.supplementalSemanticIds) {
+        return null;
+    }
+
+    return element.supplementalSemanticIds.map(id => getReferenceAsSingleKey(id));
+}
+
 const getReferenceAsSingleKey = (reference) => {
     const keys = reference.keys;
     return keys[keys.length - 1].value;
@@ -81,7 +89,7 @@ const getExtensionValue = (element, extensionSemanticId) => {
 }
 
 const hasExtensionValue = (element, extensionSemanticId, extensionValue) => {
-    
+
     return getExtensionValue(element, extensionSemanticId) === extensionValue;
 }
 
@@ -94,6 +102,7 @@ module.exports = {
     filterChildren: filterChildren,
     getChildren: getChildren,
     getSemanticIdAsSingleKey: getSemanticIdAsSingleKey,
+    getSupplementarySemanticIdsAsSingleKeys: getSupplementarySemanticIdsAsSingleKeys,
     getReferenceAsSingleKey: getReferenceAsSingleKey,
     getExtensionValue: getExtensionValue,
     hasExtensionValue: hasExtensionValue
