@@ -40,7 +40,13 @@ After instantiating this node, make sure to provide its input with messages cont
     // currently mounted tools) or on a type-base (taking into account tools that can theoretically 
     // be mounted); if this parameter is omitted, the type of check will be determined based on 
     // the type of machine AAS (AAS type == instance -> instance check; AAS type == type -> type check)
-    "instanceCheck" : false // or: omit this parameter
+    "instanceCheck" : false, // or: omit this parameter
+    // username that will be included when fetching data from the endpoint(s); username/password will be included directly in the fetch urls; it 
+    // is assumed that username and passwords for all endpoints are identical
+    "username" : "my-username", // or: omit this parameter
+    // password that will be included when fetching data from the endpoint(s); username/password will be included directly in the fetch urls; it 
+    // is assumed that username and passwords for all endpoints are identical
+    "password" : "my-password" // or: omit this parameter
 }
 ```
 

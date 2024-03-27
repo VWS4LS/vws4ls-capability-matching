@@ -19,9 +19,16 @@ const aas = require('@aas-core-works/aas-core3.0-typescript');
  * @param {boolean} instanceCheck whether the capability check shall be executed on an instance-base (taking into account the currently mounted tools) or on a type-base
  *  (taking into account tools that can theoretically be mounted); if this parameter is omitted, the type of check will be determined based on the type of machine AAS
  *  (AAS type == instance -> instance check; AAS type == type -> type check)
+ * @param {string} username an optional username that will be included when fetching data from the endpoint(s); username/password will be included directly in the fetch urls; it 
+ *  is assumed that username and passwords for all endpoints are identical
+ * @param {string} password an optional password that will be included when fetching data from the endpoint(s); username/password will be included directly in the fetch urls; it 
+ *  is assumed that username and passwords for all endpoints are identical
  * @returns A result object (or an array of result objects in case multiple required capabilities where queried) describing the result(s) of the capability check. 
  */
-const executeCapabilityCheck = async (endpoint, requiredCapabiltySubmodelId, requiredCapabilityContainerIdShortPath, machineAasId, instanceCheck = null) => {
+const executeCapabilityCheck = async (endpoint, requiredCapabiltySubmodelId, requiredCapabilityContainerIdShortPath, machineAasId, instanceCheck = null, username = null, password = null) => {
+
+    aasRestAPI.setUsername(username);
+    aasRestAPI.setPassword(password);
 
     if (typeof (requiredCapabilityContainerIdShortPath) === 'string') {
         return executeSingleCapabilityCheck(endpoint, requiredCapabiltySubmodelId, requiredCapabilityContainerIdShortPath, machineAasId, instanceCheck);
@@ -185,12 +192,17 @@ module.exports = {
     executeCapabilityCheck: executeCapabilityCheck
 };
 
+/*
 executeCapabilityCheck(
     {
-        "aasRegistryEndpoint": 'http://tractus-x-07.arena2036.de:8082',
-        "submodelRegistryEndpoint": 'http://tractus-x-07.arena2036.de:8083'
+        "aasRegistryEndpoint": "https://tractus-x-07.arena2036.de:8082",
+        "submodelRegistryEndpoint": "https://tractus-x-07.arena2036.de:8083"
     },
     "https://www.arena2036.de/sm/7084_8002_2042_5688",
-    "CapabilitySet/CapabilityContainer03",
-    "http://smart.komaxgroup.com/aas/03bb64b3-2563-4f22-a475-b3732bad1e16"
-);
+    "CapabilitySet/CapabilityContainer01",
+    "http://smart.komaxgroup.com/aas/03bb64b3-2563-4f22-a475-b3732bad1e16",
+    null,
+    "arena2036",
+    "<password>"
+).then(result => console.log(result));
+*/

@@ -1,5 +1,9 @@
-const fetch = require('node-fetch');
+const nodeFetch = require('node-fetch');
 const aas = require('@aas-core-works/aas-core3.0-typescript');
+const { URL } = require('url');
+
+let username = null;
+let password = null;
 
 const getShellsViaServer = async (aasServerEndpoint, predicate = () => true) => {
 
@@ -122,6 +126,13 @@ const encodeBase64Url = (string) => {
     return Buffer.from(string).toString('base64').replace(/=/g, "").replace(/\+/g, "-").replace(/\//g, "_");
 }
 
+const fetch = async (url) => {
+    const urlWithUserNameAndPassword = new URL(url);
+    urlWithUserNameAndPassword.username = username;
+    urlWithUserNameAndPassword.password = password;
+    return nodeFetch(urlWithUserNameAndPassword.href);
+}
+
 module.exports = {
     serverBasedApi: {
         getShellsViaServer: getShellsViaServer,
@@ -136,5 +147,7 @@ module.exports = {
         getSubmodelsViaRegistry: getSubmodelsViaRegistry,
         getFirstSubmodelViaRegistry: getFirstSubmodelViaRegistry,
         getSubmodelViaRegistry: getSubmodelViaRegistry
-    }
+    },
+    setUsername: (name) => username = name,
+    setPassword: (pw) => password = pw
 }

@@ -53,12 +53,22 @@ const machineAasId = 'www.komaxgroup.com/ids/aas/4420_0010_1010_9339';
 // the type of machine AAS (AAS type == instance -> instance check; AAS type == type -> type check)
 const instanceCheck = false;
 
+// username that will be included when fetching data from the endpoint(s); username/password will be included directly in the fetch urls; it 
+// is assumed that username and passwords for all endpoints are identical
+const username = 'my-username';
+
+// password that will be included when fetching data from the endpoint(s); username/password will be included directly in the fetch urls; it 
+// is assumed that username and passwords for all endpoints are identical
+const password = 'my-password';
+
 let result = await capabilityCheck.executeCapabilityCheck(
     aasRestServerEndpoint, // or: registryEndpoints
     requiredCapabiltySubmodelId, 
     requiredCapabilityContainerIdShortPath, 
     machineAasId,
-    instanceCheck // or: omit this parameter        
+    instanceCheck, // or: omit this parameter
+    username, // or: omit this parameter
+    password // or: omit this parameter
 );
 
 // whether the capability check succeeded

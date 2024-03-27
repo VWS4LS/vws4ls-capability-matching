@@ -12,7 +12,9 @@ module.exports = function (RED) {
                 payload.requiredCapabiltySubmodelId,
                 payload.requiredCapabilityContainerIdShortPath,
                 payload.machineAasId,
-                payload.instanceCheck
+                payload.instanceCheck,
+                payload.username,
+                payload.password
             );
 
             msg.payload = result;
