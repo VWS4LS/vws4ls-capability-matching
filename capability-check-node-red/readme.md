@@ -17,6 +17,11 @@ More information can be found in its own [readme](../capability-check//readme.md
 For more information about installing a module into your Node-RED runtime,
 refer to [the Node-RED documentation](https://nodered.org/docs/creating-nodes/first-node#testing-your-node-in-node-red).
 
+## Docker
+
+A Docker container that already includes node-red as well as the capability-check node can be created executing the following command in this directory:
+`docker build -t node-red-capability-check -f Dockerfile ..`
+
 ## Usage
 
 Once installed correctly, your Node-RED runtime should provide an addtional node called `capability-check` in the 'function' section. 
