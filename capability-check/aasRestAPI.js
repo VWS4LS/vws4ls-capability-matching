@@ -128,8 +128,12 @@ const encodeBase64Url = (string) => {
 
 const fetch = async (url) => {
     const urlWithUserNameAndPassword = new URL(url);
-    urlWithUserNameAndPassword.username = username;
-    urlWithUserNameAndPassword.password = password;
+    if (username !== null) {
+        urlWithUserNameAndPassword.username = username;
+    }
+    if (password !== null) {
+        urlWithUserNameAndPassword.password = password;
+    }
     return nodeFetch(urlWithUserNameAndPassword.href);
 }
 
