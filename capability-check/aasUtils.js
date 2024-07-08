@@ -75,7 +75,7 @@ const getReferenceAsSingleKey = (reference) => {
 }
 
 const getExtensionValue = (element, extensionSemanticId) => {
-    if (!element.extensions) {
+    if (!element?.extensions) {
         return null;
     }
 

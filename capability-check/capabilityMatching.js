@@ -151,9 +151,9 @@ const getRequiredToolCondition = (offeredCapabilityContainer) => {
 }
 
 const determineMountingPaths = (ressourceAas, aASes) => {
-    var mountingPaths = [];
+    const mountingPaths = [];
 
-    var requiredSlotExtension = aasUtils.getExtensionValue(ressourceAas, "http://arena2036.de/requiredSlot/1/0");
+    const requiredSlotExtension = aasUtils.getExtensionValue(ressourceAas, "http://arena2036.de/requiredSlot/1/0");
 
     if (!requiredSlotExtension) {
         // aas/ressource does not need to be mounted anywhere
@@ -161,15 +161,15 @@ const determineMountingPaths = (ressourceAas, aASes) => {
         return mountingPaths;
     }
 
-    for (var aas of aASes.filter(aas => aas.id !== ressourceAas.id)) {
-        var offeredSlotExtension = aasUtils.getExtensionValue(aas, "http://arena2036.de/offeredSlot/1/0");
+    for (const aas of aASes.filter(aas => aas.id !== ressourceAas.id)) {
+        const offeredSlotExtension = aasUtils.getExtensionValue(aas, "http://arena2036.de/offeredSlot/1/0");
 
         if (!offeredSlotExtension || offeredSlotExtension !== requiredSlotExtension) {
             // aas/ressource does not provide a suitable slot
             continue;
         }
 
-        for (var subPath of determineMountingPaths(aas, aASes)) {
+        for (const subPath of determineMountingPaths(aas, aASes)) {
 
             mountingPaths.push([ressourceAas.id, requiredSlotExtension, ...subPath]);
         }

@@ -134,7 +134,7 @@ const fetch = async (url) => {
     if (password !== null) {
         urlWithUserNameAndPassword.password = password;
     }
-    return nodeFetch(urlWithUserNameAndPassword.href);
+    return await nodeFetch(urlWithUserNameAndPassword.href);
 }
 
 module.exports = {

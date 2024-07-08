@@ -41,10 +41,8 @@ After instantiating this node, make sure to provide its input with messages cont
     // the id of the AAS representing the machine to check for the required capability
     // (this is expected to be available at the AAS server, see above)
     "machineAasId" : "www.komaxgroup.com/ids/aas/4420_0010_1010_9339",
-    // whether the capability check shall be executed on an instance-base (taking into account the 
-    // currently mounted tools) or on a type-base (taking into account tools that can theoretically 
-    // be mounted); if this parameter is omitted, the type of check will be determined based on 
-    // the type of machine AAS (AAS type == instance -> instance check; AAS type == type -> type check)
+    // whether the capability check shall take into account only the currently mounted tools (true) or all tools that can theoretically be mounted (false); 
+    // default is 'false'
     "instanceCheck" : false, // or: omit this parameter
     // username that will be included when fetching data from the endpoint(s); username/password will be included directly in the fetch urls; it 
     // is assumed that username and passwords for all endpoints are identical
