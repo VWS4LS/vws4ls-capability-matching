@@ -72,6 +72,28 @@ let result = await capabilityCheck.executeCapabilityCheck(
 // whether the capability check succeeded
 const success = result.success;
 
+// a result code that further describes the result of the check; this is one of:
+// 'CAPABILTY_FULFILLED_BY_MACHINE'
+//      --> successful: the machine fulfills the capability and no tool is required
+// 'SUITABLE_TOOL_MOUNTED'
+//      --> successful: the machine fulfills the capability and is already equipped with a suitable tol
+// 'SUITABLE_TOOL_NEEDS_TO_BE_MOUNTED'
+//      --> successflu: the machine fulfills the capability and a suitable tool exists but the tool needs
+//          to be mounted into the machine first
+// 'CAPABILTY_NOT_FULFILLED_BY_MACHINE'
+//      --> not successful: the machine does not fulfill the capability
+// 'NO_SUITABLE_TOOL_MOUNTED' 
+//      --> not successful: the machine fulfills the capability but no suitable tool was mounted 
+//          (only if 'instanceCheck' was set to 'true')
+// 'NO_SUITABLE_TOOL_EXISTS'
+//      --> not successful: the machine fulfills the capability but no suitable tool was found (in the registry)
+// 'NO_MOUNTING_PATH_FOR_SUITABLE_TOOL_FOUND'
+//      --> not successful: the machine fulfills the capabiilty and at least one suitable tool was found but the 
+//          tool canot be mounted in the machine
+// 'INTERNAL_ERROR'
+//      --> not sucessful: an internal error occurred
+const resultCode = result.resultCode;
+
 // the result object contains more information about the result of the capability
 // check, e.g. a message via the check failed or information about additional 
 // tools required to provide a capability
