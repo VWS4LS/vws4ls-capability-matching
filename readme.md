@@ -1,9 +1,11 @@
-# Capability Matching
+# vws4ls-capability-matching
 
-This is a result from the research project "VWS4LS". It provides functionality
-to check if a certain machine is able to provide a certain capability required
-to produce (parts of) a wiring harness. One example would be to crimp a certain
-contact with a wire of a certain diameter.
+This repository provides functionalities to check if a certain machine is able to provide a certain capability required
+to produce (parts of) a wiring harness. One example would be to crimp a certain contact with a wire of a certain diameter.
+
+This is a result from the research project [Asset Administration Shell for the Wiring Harness](https://arena2036.de/en/asset-administration-shell-for-wire-harness) (*VWS4LS*) funded by the German Federal Ministry of Education and Research. 
+
+A detailed description of the results of the various subprojects can be found [here](https://arena2036.de/de/vws4ls-ergebnisse) (German only).
 
 This repository contains to projects:
 
