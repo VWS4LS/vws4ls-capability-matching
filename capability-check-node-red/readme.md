@@ -1,7 +1,7 @@
 # Capability Check Node Red
 
 This project is a result from the research project "VWS4LS". It provides a node
-definition for node-red that checks if a certain machine is able to provide a 
+definition for [Node-RED](https://nodered.org/) that checks if a certain machine is able to provide a 
 certain capability required to produce (parts of) a wiring harness. One example 
 would be to crimp a certain contact with a wire of a certain diameter.
 
