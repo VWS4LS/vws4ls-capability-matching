@@ -72,30 +72,82 @@ let result = await capabilityCheck.executeCapabilityCheck(
 // whether the capability check succeeded
 const success = result.success;
 
-// a result code that further describes the result of the check; this is one of:
-// 'CAPABILTY_FULFILLED_BY_MACHINE'
-//      --> successful: the machine fulfills the capability and no tool is required
-// 'SUITABLE_TOOL_MOUNTED'
-//      --> successful: the machine fulfills the capability and is already equipped with a suitable tol
-// 'SUITABLE_TOOL_NEEDS_TO_BE_MOUNTED'
-//      --> successflu: the machine fulfills the capability and a suitable tool exists but the tool needs
-//          to be mounted into the machine first
-// 'CAPABILTY_NOT_FULFILLED_BY_MACHINE'
-//      --> not successful: the machine does not fulfill the capability
-// 'NO_SUITABLE_TOOL_MOUNTED' 
-//      --> not successful: the machine fulfills the capability but no suitable tool was mounted 
-//          (only if 'instanceCheck' was set to 'true')
-// 'NO_SUITABLE_TOOL_EXISTS'
-//      --> not successful: the machine fulfills the capability but no suitable tool was found (in the registry)
-// 'NO_MOUNTING_PATH_FOR_SUITABLE_TOOL_FOUND'
-//      --> not successful: the machine fulfills the capabiilty and at least one suitable tool was found but the 
-//          tool canot be mounted in the machine
-// 'INTERNAL_ERROR'
-//      --> not sucessful: an internal error occurred
+// a result code that further describes the result of the check
 const resultCode = result.resultCode;
 
 // the result object contains more information about the result of the capability
-// check, e.g. a message via the check failed or information about additional 
-// tools required to provide a capability
+// check, see below for a detailed explanation
 console.log(result);
+```
+
+## Example Result
+
+```javascript
+{
+    // the 'endpoint' that was set in the request
+    "endpoint": "http://aas-env:8081", 
+    // the 'requiredCapabiltySubmodelId' that was set in the request
+    "requiredCapabiltySubmodelId": "www.tier1.com/ids/sm/2135_1132_8032_2655",
+    // the 'requiredCapabilityContainerIdShortPath' that was set in the request
+    "requiredCapabilityContainerIdShortPath": "CapabilitySet/CapabilityContainer01",
+    // the 'machineAasId' that was set in the request
+    "machineAasId": "www.komaxgroup.com/ids/aas/4420_0010_1010_9339",
+    // the 'assetKind' of the requested asset/AAS (instance/type)
+    "assetKind": "instance",
+    // wheter only currently mounted tools shall be regarded (this is equivalent to the 'instanceCheck' parameter in the request)
+    "onlyRegardMountedTools": false,
+    // if the algorithm determined that a tool is required by the machine to execute the capability
+    "toolRequired": true,
+    // which type of tool is required by the machine to execute the capability (only if 'toolRequired' is true)
+    "requiredToolType": "CrimpingApplicator",
+    // the list of tools currently mounted in the machine (represented by their AAS id)
+    "mountedTools": [
+        "www.schaefer.biz/ids/aas/3000_0010_1010_9927"
+    ],
+    // the subset of the mounted tools that are of the 'requiredTooltype'
+    "suitableMountedTools": [],
+    // the list of tools that are of the 'requiredToolType' and are able to fulfil the capability (represented by their AAS id);
+    // NOTE: this also includes tools that are not currently mounted!
+    "suitableTools": [
+        "www.schaefer.biz/ids/aas/0505_3180_7042_9750"
+    ],
+    // whether the capability check succeeded, i.e. whether the machine is (theoretically) capable of executing the required capability, potentially with the help of a tool to be mounted
+    "success": true,
+    // a result code that further describes the result of the check; this is one of:
+    // 'CAPABILTY_FULFILLED_BY_MACHINE'
+    //      --> successful: the machine fulfills the capability and no tool is required
+    // 'SUITABLE_TOOL_MOUNTED'
+    //      --> successful: the machine fulfills the capability and is already equipped with a suitable tol
+    // 'SUITABLE_TOOL_NEEDS_TO_BE_MOUNTED'
+    //      --> successflu: the machine fulfills the capability and a suitable tool exists but the tool needs
+    //          to be mounted into the machine first
+    // 'CAPABILTY_NOT_FULFILLED_BY_MACHINE'
+    //      --> not successful: the machine does not fulfill the capability
+    // 'NO_SUITABLE_TOOL_MOUNTED' 
+    //      --> not successful: the machine fulfills the capability but no suitable tool was mounted 
+    //          (only if 'instanceCheck' was set to 'true')
+    // 'NO_SUITABLE_TOOL_EXISTS'
+    //      --> not successful: the machine fulfills the capability but no suitable tool was found (in the registry)
+    // 'NO_MOUNTING_PATH_FOR_SUITABLE_TOOL_FOUND'
+    //      --> not successful: the machine fulfills the capabiilty and at least one suitable tool was found but the 
+    //          tool canot be mounted in the machine
+    // 'INTERNAL_ERROR'
+    //      --> not sucessful: an internal error occurred
+    "resultCode": "SUITABLE_TOOL_NEEDS_TO_BE_MOUNTED",
+    // a human readable message explaining the result
+    "message": "AAS with id \"www.komaxgroup.com/ids/aas/4420_0010_1010_9339\" offers the required capability \"Crimp\" and fulfills all constraints\"! However, a suitable tool needs to be mounted.",
+    // for each of the 'suitableTools', a list of potential 'mounting paths';
+    // each mounting path is represented by an array that starts with the AAS id of the tool and ends with the AAS id of the machine; these are connected by a list of 'slots' (represented by their name) and further resources that are required to mount the tool into the machine (represented by the AAS id)
+    "mountingPathsByTool": {
+        "www.schaefer.biz/ids/aas/0505_3180_7042_9750": [
+            [
+                "www.schaefer.biz/ids/aas/0505_3180_7042_9750",
+                "KomaxApplicator",
+                "www.komaxgroup.com/ids/aas/5420_0010_1010_4681",
+                "KomaxModule",
+                "www.komaxgroup.com/ids/aas/4420_0010_1010_9339"
+            ]
+        ]
+    }
+}
 ```
