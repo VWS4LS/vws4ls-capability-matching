@@ -42,7 +42,7 @@ jobs:
     - name: Build the Docker image
       run: |
         cd capability-check-node-red
-        docker build -t node-red-capability-check:${{ steps.inferVersion.outputs.version }} -f Dockerfile ..  
+        docker build -t node-red-capability-check:v${{ steps.inferVersion.outputs.version }} -f Dockerfile ..  
     - name: Export the Docker image
       run: docker save -o node-red-capability-check_v${{ steps.inferVersion.outputs.version }}.tar node-red-capability-check:v${{ steps.inferVersion.outputs.version }}
     - name: Upload the release assets
