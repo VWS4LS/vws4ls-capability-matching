@@ -22,9 +22,8 @@ refer to [the Node-RED documentation](https://nodered.org/docs/creating-nodes/fi
 A Docker image that already includes node-red as well as the capability-check node can be created executing the following command in this directory:
 `docker build -t capability-check-node-red -f Dockerfile ..`
 
-Pre-built images can be downloaded from the [Releases](https://github.com/VWS4LS/vws4ls-capability-matching/releases).
-
-After you have built/downloaded an image, perform `docker load -i <path-to-image.tar>` to load the image.
+Alternatively, you can use one of the pre-built images from the [Releases](https://github.com/VWS4LS/vws4ls-capability-matching/releases).
+To load one of these, download the image and then perform `docker load -i <path-to-image.tar>`.
 
 ## Usage
 
