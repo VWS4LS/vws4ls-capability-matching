@@ -53,4 +53,4 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: "v${{ steps.inferVersion.outputs.version }}"
-        asset_files: "capability-check-node-red/node-red-capability-check_v${{ steps.inferVersion.outputs.version }}.tar"
+        asset_files: "capability-check-node-red/capability-check-node-red_v${{ steps.inferVersion.outputs.version }}.tar"
