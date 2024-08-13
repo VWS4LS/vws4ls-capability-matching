@@ -15,6 +15,12 @@ official REST API of the Asset Administration Shell.
 
 ## Installation
 
+As the npm package is located in a subfolder of the Github repo, you can use `gitpkg` to install it directly from the repo:
+
+`npm install 'https://gitpkg.vercel.app/VWS4LS/vws4ls-capability-matching/capability-check?main'`
+
+Alternative: Clone the repo to a loca path and then run 
+
 `npm install <local-path-to/>capability-check`
 
 ## Usage
