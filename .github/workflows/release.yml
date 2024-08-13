@@ -15,39 +15,36 @@ jobs:
     - name: Infer the version from the github ref
       id: inferVersion
       run: |
-        $prefix = "refs/tags/v"
-        if (!${env:GITHUB_REF}.StartsWith($prefix))
-        {
-            throw "Unexpected GITHUB_REF: ${env:GITHUB_REF}"
-        }
-
-        $version = ${env:GITHUB_REF}.Substring($prefix.Length)
-        Write-Host "The version is: $version"
-
-        if ($version.Contains("'"))
-        {
-            throw "Unexpected version containing a single quote: $version"
-        }
-        if ($version.Contains('"'))
-        {
-            throw "Unexpected version containing a double quote: $version"
-        }
-        if ($version.Contains(':'))
-        {
-            throw "Unexpected version containing a full colon: $version"
-        }
-
-        Write-Output "::set-output name=version::$version"
+        prefix="refs/tags/v"
+        if [[ ! "${GITHUB_REF}" == ${prefix}* ]]; then
+            echo "Unexpected GITHUB_REF: ${GITHUB_REF}"
+            exit 1
+        fi
+        
+        version="${GITHUB_REF:${#prefix}}"
+        echo "The version is: ${version}"
+        
+        if [[ "${version}" == *"'"* ]]; then
+            echo "Unexpected version containing a single quote: ${version}"
+            exit 1
+        fi
+        if [[ "${version}" == *'"'* ]]; then
+            echo "Unexpected version containing a double quote: ${version}"
+            exit 1
+        fi
+        if [[ "${version}" == *':'* ]]; then
+            echo "Unexpected version containing a full colon: ${version}"
+            exit 1
+        fi
+        
+        echo "::set-output name=version::${version}"
     - uses: actions/checkout@v4
     - name: Build the Docker image
       run: |
-        $version = '${{ steps.inferVersion.outputs.version }}'
         cd capability-check-node-red
-        docker build -t node-red-capability-check:$version -f Dockerfile ..  
+        docker build -t node-red-capability-check:${{ steps.inferVersion.outputs.version }} -f Dockerfile ..  
     - name: Export the Docker image
-      run: |
-        $version = '${{ steps.inferVersion.outputs.version }}'
-        docker save -o node-red-capability-check_$version.tar node-red-capability-check:$version
+      run: docker save -o node-red-capability-check_v${{ steps.inferVersion.outputs.version }}.tar node-red-capability-check:v${{ steps.inferVersion.outputs.version }}
     - name: Upload the release assets
       uses: Hs1r1us/Release-AIO@v2.0.0
       env:
