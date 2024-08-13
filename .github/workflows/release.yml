@@ -42,13 +42,13 @@ jobs:
     - name: Build the Docker image
       run: |
         cd capability-check-node-red
-        docker build -t node-red-capability-check:v${{ steps.inferVersion.outputs.version }} -f Dockerfile ..  
+        docker build -t capability-check-node-red:v${{ steps.inferVersion.outputs.version }} -f Dockerfile ..  
     - name: Export the Docker image
-      run: docker save -o node-red-capability-check_v${{ steps.inferVersion.outputs.version }}.tar node-red-capability-check:v${{ steps.inferVersion.outputs.version }}
+      run: docker save -o capability-check-node-red_v${{ steps.inferVersion.outputs.version }}.tar capability-check-node-red:v${{ steps.inferVersion.outputs.version }}
     - name: Upload the release assets
       uses: Hs1r1us/Release-AIO@v2.0.0
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: "v${{ steps.inferVersion.outputs.version }}"
-        asset_files: "node-red-capability-check_v${{ steps.inferVersion.outputs.version }}.tar"
+        asset_files: "capability-check-node-red/node-red-capability-check_v${{ steps.inferVersion.outputs.version }}.tar"

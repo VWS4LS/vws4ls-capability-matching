@@ -20,7 +20,7 @@ refer to [the Node-RED documentation](https://nodered.org/docs/creating-nodes/fi
 ## Docker
 
 A Docker container that already includes node-red as well as the capability-check node can be created executing the following command in this directory:
-`docker build -t node-red-capability-check -f Dockerfile ..`
+`docker build -t capability-check-node-red -f Dockerfile ..`
 
 ## Usage
 
