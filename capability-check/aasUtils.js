@@ -54,7 +54,7 @@ const getChildren = (parent) => {
 }
 
 const getSemanticIdAsSingleKey = (element) => {
-    if (!element.semanticId) {
+    if (!element?.semanticId) {
         return null;
     }
 
@@ -62,7 +62,7 @@ const getSemanticIdAsSingleKey = (element) => {
 }
 
 const getSupplementarySemanticIdsAsSingleKeys = (element) => {
-    if (!element.supplementalSemanticIds) {
+    if (!element?.supplementalSemanticIds) {
         return null;
     }
 
@@ -70,6 +70,11 @@ const getSupplementarySemanticIdsAsSingleKeys = (element) => {
 }
 
 const getReferenceAsSingleKey = (reference) => {
+
+    if (!reference?.keys) {
+        return null;
+    }
+
     const keys = reference.keys;
     return keys[keys.length - 1].value;
 }
